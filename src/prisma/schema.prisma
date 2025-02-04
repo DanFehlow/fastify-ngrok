@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// datasource db {
+//   provider = "sqlserver"
+//   url      = "sqlserver://appiancrud%40appian-crud.database.windows.net:1433;database=appian-crud;user=appiancrud%40appian-crud;password=Teste123!;encrypt=true;loginTimeout=30"
+//   shadowDatabaseUrl = "sqlserver://appiancrud%40appian-crud.database.windows.net:1433;database=appian-crud-shadow-db;user=appiancrud%40appian-crud-shadow-db;password=Teste123!;encrypt=true;loginTimeout=30"
+// }
+
+
+datasource db {
+  provider          = "sqlserver"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Todo {
+  id        Int      @id @default(autoincrement())
+  task      String   @db.NVarChar(100)
+  done      Boolean  @default(false)
+  endDate   DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@index([id])
+  @@index([task])
+  @@index([done])
+  @@index([createdAt])
+}
+
+model User {
+  id              String   @id @default(uuid()) @db.UniqueIdentifier
+  cpf             String   @unique @db.NVarChar(200)
+  email           String   @unique @db.NVarChar(200)
+  celular         String   @db.NVarChar(20)
+  nome            String   @db.NVarChar(200)
+  nome_social     String   @db.NVarChar(200)
+  data_nascimento DateTime @db.Date()
+  data_obito      DateTime @db.Date()
+  sexo            String   @db.NVarChar(20)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
+
+  @@index([id])
+  @@index([cpf])
+  @@index([createdAt])
+}
+
+model LegalEntity {
+  id              String   @id @default(uuid()) @db.UniqueIdentifier
+  cnpj            String   @unique @db.NVarChar(20)
+  razaoSocial     String   @db.NVarChar(200)
+  nomeFantasia    String   @db.NVarChar(200)
+  cnaePrincipal   String   @db.NVarChar(10)
+  email           String   @unique @db.NVarChar(200)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now()) @updatedAt
+
+  @@index([cnpj])
+  @@index([email])
+}
+
+model NaturalPerson {
+  id                String   @id @default(uuid()) @db.UniqueIdentifier
+  cpf               String   @unique @db.NVarChar(20)
+  nome              String   @db.NVarChar(200)
+  dataNascimento    DateTime @db.Date()
+  nacionalidade     String   @db.NVarChar(10)
+  email             String   @unique @db.NVarChar(200)
+  sexo              String   @db.NVarChar(200)
+
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now()) @updatedAt
+
+  @@index([cpf])
+  @@index([email])
+}
