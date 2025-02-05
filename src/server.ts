@@ -73,8 +73,8 @@ async function initialize() {
     await app.listen({ port: envs.PORT }).then(async () => {
       console.log(`HTTP server is running on => http://localhost:${envs.PORT}`);
 
-      const url = await ngrok.connect(envs.PORT);
-      console.log(`Server is accessible externally at: ${url}`);
+       const url = await ngrok.connect(envs.PORT);
+        console.log(`Server is accessible externally at: ${url}`);
     });
   } catch (error) {
     app.log.error(error);
